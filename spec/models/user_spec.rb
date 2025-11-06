@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe User do
   let(:user) { create(:user) }
-  let(:task) { create(:task, user: user, completed: false) }
-  let(:completed_task) { create(:task, user: user, completed: true) }
+  let(:task) { create(:task, user: user, status: 'pending') }
+  let(:completed_task) { create(:task, user: user, status: 'completed') }
 
   describe '#complete_task!' do
     context 'when the task belongs to the user' do
@@ -46,14 +46,14 @@ RSpec.describe User do
 
   describe '#pending_tasks_count' do
     it 'returns the count of pending tasks' do
-      create_list(:task, 3, user: user, completed: false)
+      create_list(:task, 3, user: user, status: 'pending')
       expect(user.pending_tasks_count).to eq(3)
     end
   end
 
   describe '#completed_tasks_count' do
     it 'returns the count of completed tasks' do
-      create_list(:task, 2, user: user, completed: true)
+      create_list(:task, 2, user: user, status: 'completed')
       expect(user.completed_tasks_count).to eq(2)
     end
   end
@@ -64,20 +64,20 @@ RSpec.describe User do
     end
 
     it 'calculates the completion rate correctly' do
-      create_list(:task, 2, user: user, completed: true)
-      create_list(:task, 3, user: user, completed: false)
+      create_list(:task, 2, user: user, status: 'completed')
+      create_list(:task, 3, user: user, status: 'pending')
       expect(user.completion_rate).to eq(40.0)
     end
   end
 
   describe '#has_overdue_tasks?' do
     it 'returns true if there are overdue tasks' do
-      create(:task, user: user, due_date: 1.day.ago, completed: false)
+      create(:task, user: user, due_date: 1.day.ago, status: 'pending')
       expect(user.has_overdue_tasks?).to be true
     end
 
     it 'returns false if there are no overdue tasks' do
-      create(:task, user: user, due_date: 1.day.from_now, completed: false)
+      create(:task, user: user, due_date: 1.day.from_now, status: 'pending')
       expect(user.has_overdue_tasks?).to be false
     end
   end
