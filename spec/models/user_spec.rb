@@ -8,7 +8,7 @@ RSpec.describe User do
   describe '#complete_task!' do
     context 'when the task belongs to the user' do
       it 'completes the task and increments karma' do
-        expect(task).to receive(:complete!).and_return(true)
+        allow(task).to receive(:complete!).and_return(true)
         expect { user.complete_task!(task) }.to change { user.karma }.by(User::KARMA_PER_COMPLETED_TASK)
         expect(user.complete_task!(task)).to be true
       end
