@@ -72,7 +72,7 @@ RSpec.describe User do
 
   describe '#has_overdue_tasks?' do
     it 'returns true if there are overdue tasks' do
-      Task.create(user: user, due_date: Date.yesterday)
+      Task.create(user: user, due_date: Date.yesterday, status: 'pending')
       expect(user.has_overdue_tasks?).to be true
     end
 
