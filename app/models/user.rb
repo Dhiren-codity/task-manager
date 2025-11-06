@@ -47,4 +47,22 @@ class User < ActiveRecord::Base
   def active?
     !banned_at.present?
   end
+
+  def display_name
+    name.present? ? name : email.split("@").first
+  end
+
+  def productive?
+    completion_rate >= 70.0
+  end
+
+  def task_summary
+    total = tasks.count
+    return "No tasks" if total.zero?
+
+    completed = completed_tasks_count
+    pending = pending_tasks_count
+
+    "#{total} tasks (#{completed} completed, #{pending} pending)"
+  end
 end
