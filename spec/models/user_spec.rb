@@ -2,12 +2,12 @@ require 'spec_helper'
 
 RSpec.describe User do
   let(:user) { User.create(email: 'test@example.com', name: 'Test User', karma: 0) }
-  let(:task) { Task.create(user: user, completed: false) }
+  let(:task) { Task.create(user: user, status: 'pending') }
 
   describe '#complete_task!' do
     context 'when task belongs to the user' do
       it 'completes the task and increments karma' do
-        expect(task).to receive(:complete!).and_return(true)
+        allow(task).to receive(:complete!).and_return(true)
         expect { user.complete_task!(task) }.to change { user.karma }.by(User::KARMA_PER_COMPLETED_TASK)
       end
 
@@ -24,7 +24,7 @@ RSpec.describe User do
 
     context 'when task does not belong to the user' do
       let(:other_user) { User.create(email: 'other@example.com', name: 'Other User') }
-      let(:other_task) { Task.create(user: other_user, completed: false) }
+      let(:other_task) { Task.create(user: other_user, status: 'pending') }
 
       it 'returns false' do
         expect(user.complete_task!(other_task)).to be false
@@ -46,14 +46,14 @@ RSpec.describe User do
 
   describe '#pending_tasks_count' do
     it 'returns the count of pending tasks' do
-      Task.create(user: user, completed: false)
+      Task.create(user: user, status: 'pending')
       expect(user.pending_tasks_count).to eq(2)
     end
   end
 
   describe '#completed_tasks_count' do
     it 'returns the count of completed tasks' do
-      task.update(completed: true)
+      task.update(status: 'completed')
       expect(user.completed_tasks_count).to eq(1)
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe User do
     end
 
     it 'calculates the completion rate correctly' do
-      Task.create(user: user, completed: true)
+      Task.create(user: user, status: 'completed')
       expect(user.completion_rate).to eq(50.0)
     end
   end
