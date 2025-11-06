@@ -92,3 +92,15 @@ RSpec.describe User do
     end
   end
 end
+
+class Task < ActiveRecord::Base
+  belongs_to :user
+
+  scope :pending, -> { where(status: 'pending') }
+  scope :completed, -> { where(status: 'completed') }
+  scope :overdue, -> { where('due_date < ? AND status = ?', Date.today, 'pending') }
+
+  def complete!
+    update(status: 'completed')
+  end
+end
