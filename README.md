@@ -13,17 +13,22 @@ This is a lightweight task management system with:
 ## 🏗️ Architecture
 
 ```
-lib/
-├── task.rb                      # Task model with status, priority
-├── user.rb                      # User model with karma system
-└── task_statistics_service.rb  # Business logic for analytics
+app/
+├── models/
+│   ├── task.rb
+│   └── user.rb
+└── services/
+    └── task_statistics_service.rb
 
 spec/
-├── spec_helper.rb               # RSpec configuration
-├── factories/                   # FactoryBot test data
+├── spec_helper.rb
+├── factories/
 │   ├── users.rb
 │   └── tasks.rb
-└── models/                      # (Tests will be auto-generated here)
+└── models/
+
+config/
+└── application.rb
 ```
 
 ## 🚀 Setup

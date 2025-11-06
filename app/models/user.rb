@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
     format: {with: /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/}
   validates :name, presence: true, length: {minimum: 2, maximum: 50}
 
-  # karma system
   KARMA_PER_COMPLETED_TASK = 10
   HIGH_KARMA_THRESHOLD = 100
 
